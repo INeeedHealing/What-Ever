@@ -114,10 +114,12 @@ public class KleinsterKreis {
 
                         if (radius < Math.pow((dx2 * dx2 + dy2 * dy2), 0.5)) {//wenn der Kreis nicht der kleinste umschließende ist check beenden
                             foundCircle = false;
+                            System.out.println("Kreis passt nicht um Losmenge");
                             break;
                         }
                     }
                     if (foundCircle) {
+                        System.out.println("Kreis um Losmenge gefunden");
                         break;
                     }
                 }
@@ -141,12 +143,14 @@ public class KleinsterKreis {
                 double dy2 = Math.abs(cCenter.y - y);
 
                 if (radius < Math.pow((dx2 * dx2 + dy2 * dy2), 0.5)) {//wenn der Kreis nicht der kleinste umschließende ist check beenden
+                    System.out.println("Kreis passt nicht alle Punkte");
                     lose[k] *= 2;
                     finished = false;
                 }
             }
         }
+        System.out.println("Kreis passt um alle");
         System.out.println("Gebrauchte Zeit: " + (System.currentTimeMillis() - startTime) / 1000 + "s");
-        System.out.println("fertig");
+        
     }
 }
