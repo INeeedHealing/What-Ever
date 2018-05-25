@@ -1,6 +1,9 @@
 package kleinster.kreis;
 
 import java.util.Arrays;
+import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class KleinsterKreis {
 
@@ -18,9 +21,10 @@ public class KleinsterKreis {
     public static Tuple center = new Tuple(0, 0);
 
     public static void main(String[] args) {
+        long wartezeit = 0;
 
         double wkeiten[] = new double[ANZAHLP];
-        double anzahlLose = 0;
+        double anzahlLose;
         long lose[] = new long[ANZAHLP];
         boolean finished = false;
 
@@ -40,7 +44,7 @@ public class KleinsterKreis {
 
         while (!finished) {
             //Anzahl an Losen bestimmen
-            
+
             anzahlLose = 0;
             for (int i = 0; i < ANZAHLP; i++) {
                 anzahlLose += lose[i];
@@ -123,11 +127,11 @@ public class KleinsterKreis {
                     }
 
                     kf.refresh();
-                    /*try {
-                    TimeUnit.MILLISECONDS.sleep(500);
+                    try {
+                        TimeUnit.MILLISECONDS.sleep(wartezeit);
                     } catch (InterruptedException ex) {
-                    Logger.getLogger(KleinsterKreis.class.getName()).log(Level.SEVERE, null, ex);
-                    }*/
+                        Logger.getLogger(KleinsterKreis.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                     //checken ob alle drin sind
                     boolean found = true;
                     for (int k = 0; k < ZULOSENDEP; k++) {
@@ -188,21 +192,19 @@ public class KleinsterKreis {
                                 System.out.println("Fehler: Würde durch 0 teilen.");
                                 if (y1 == y2) {
                                     m2 = -(x2 - x3) / (y2 - y3);
-                                    c2 = (y2 + y3) / 2 + m2 * (x2 + x3) / 2;
+                                    c2 = (y2 + y3) / 2 - m2 * (x2 + x3) / 2;
 
-                                    float a = (x1 + x2) / 2;
-
-                                    center.x = (int) ((a - c2) / m2);
+                                    center.x = (int) (x1 + x2) / 2;
                                     center.y = (int) (m2 * center.x + c2);
+
                                 } else {//y2 == y3
                                     m1 = -(x1 - x2) / (y1 - y2);
-                                    c1 = (y1 + y2) / 2 + m1 * (x1 + x2) / 2;
+                                    c1 = (y1 + y2) / 2 - m1 * (x1 + x2) / 2;
 
-                                    float a = (x2 + x3) / 2;
-
-                                    center.x = (int) ((a - c1) / m1);
+                                    center.x = (int) (x2 + x3) / 2;
                                     center.y = (int) (m1 * center.x + c1);
                                 }
+
                                 kf.refresh();
                             } else {
                                 m1 = -(x1 - x2) / (y1 - y2);
@@ -223,11 +225,11 @@ public class KleinsterKreis {
                             rad = Math.pow((dx * dx + dy * dy), 0.5);
                             kf.refresh();
 
-                            /*try {
-                            TimeUnit.MILLISECONDS.sleep(300);
+                            try {
+                                TimeUnit.MILLISECONDS.sleep(wartezeit);
                             } catch (InterruptedException ex) {
-                            Logger.getLogger(KleinsterKreis.class.getName()).log(Level.SEVERE, null, ex);
-                            }*/
+                                Logger.getLogger(KleinsterKreis.class.getName()).log(Level.SEVERE, null, ex);
+                            }
                             boolean found = true;
                             for (int l = 0; l < ZULOSENDEP; l++) {
                                 int x = points[ausgelosteP[l]].x;
@@ -274,9 +276,13 @@ public class KleinsterKreis {
                 }
             }
         }
+
         kf.refresh();
-        System.out.println("Kreis passt um alle");
-        System.out.println("Gebrauchte Zeit: " + (System.currentTimeMillis() - startTime) / 1000 + "s");
+
+        System.out.println(
+                "Kreis passt um alle");
+        System.out.println(
+                "Gebrauchte Zeit: " + (System.currentTimeMillis() - startTime) / 1000 + "s");
 
     }
 }
