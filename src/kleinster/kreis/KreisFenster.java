@@ -5,6 +5,7 @@
  */
 package kleinster.kreis;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 
@@ -33,7 +34,12 @@ public class KreisFenster extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel(){
             public void paintComponent(Graphics g){
                 super.paintComponent(g);
-                zeichne(g);
+                zeichneTestKreis(g);
+                zeichneKreis(g);
+                zeichneP(g);
+                zeichneGelosteP(g);
+                zeichneGewählteP(g);
+                zeichneM(g);
             }
         };
 
@@ -41,34 +47,92 @@ public class KreisFenster extends javax.swing.JFrame {
         setMaximumSize(new java.awt.Dimension(500, 500));
         setMinimumSize(new java.awt.Dimension(500, 500));
 
+        jPanel1.setMaximumSize(new java.awt.Dimension(700, 700));
+        jPanel1.setMinimumSize(new java.awt.Dimension(700, 700));
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 500, Short.MAX_VALUE)
+            .addGap(0, 826, Short.MAX_VALUE)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 500, Short.MAX_VALUE)
+            .addGap(0, 762, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+    static int punktD = 4;    //Raius der Punkte
+    static int rand = 100;  //sorgt für abstand vom Rand in der Grafik
 
-    public void zeichne(Graphics g) {
-        g.drawOval(30, 100, 50, 50);
-        
+    //Zeichnet alle Punkte
+    public void zeichneP(Graphics g) {
+        g.setColor(Color.BLACK);
+        Tuple[] punkte = KleinsterKreis.points;
+        for (int i = 0; i < punkte.length; i++) {
+            g.fillOval(punkte[i].x - punktD + rand, punkte[i].y - punktD + rand, punktD * 2, punktD * 2);
+        }
+    }
+
+    //zeichnet den Kreis
+    public void zeichneKreis(Graphics g) {
+        g.setColor(Color.BLUE);
+        int rad = (int) KleinsterKreis.radius;
+        Tuple m = KleinsterKreis.cCenter;
+        g.drawOval(m.x - rad + rand, m.y - rad + rand, rad * 2, rad * 2);
+    }
+    public void zeichneTestKreis(Graphics g){
+        g.setColor(Color.ORANGE);
+        int rad = (int) KleinsterKreis.rad;
+        Tuple m = KleinsterKreis.center;
+        g.drawOval(m.x - rad + rand, m.y - rad + rand, rad * 2, rad * 2);
+    }
+
+    //zeichnet die ausgelosten Punkte
+    public void zeichneGelosteP(Graphics g) {
+        g.setColor(Color.GREEN);
+        Tuple punkte[] = KleinsterKreis.points;
+        int index[] = KleinsterKreis.ausgelosteP;
+        for (int i = 0; i < index.length; i++) {
+            Tuple p = punkte[index[i]];
+            g.fillOval(p.x - punktD + rand, p.y - punktD + rand, punktD * 2, punktD * 2);
+        }
+    }
+
+    //zeichnet die Kreisdefinierenden Punkte
+    public void zeichneGewählteP(Graphics g) {
+        g.setColor(Color.RED);
+        Tuple[] p = KleinsterKreis.kreisP;
+        for (Tuple p1 : p) {
+            if (p1.x != 0 && p1.y != 0) {
+                g.fillOval(p1.x - punktD + rand, p1.y - punktD + rand, punktD * 2, punktD * 2);
+            }
+        }
+    }
+
+    //zeichnet den Mittelpunkt des Kreises
+    public void zeichneM(Graphics g) {
+        g.setColor(Color.CYAN);
+        Tuple m = KleinsterKreis.cCenter;
+        if (m.x != 0 && m.y != 0) {
+            g.fillOval(m.x + rand - punktD, m.y + rand - punktD, punktD * 2, punktD * 2);
+        }
+    }
+
+    public void refresh() {
+        jPanel1.repaint();
     }
 
     /**
@@ -105,12 +169,9 @@ public class KreisFenster extends javax.swing.JFrame {
             }
         });
     }
-    
-  
-    
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel jPanel1;
     // End of variables declaration//GEN-END:variables
 }
-
